@@ -55,6 +55,11 @@ allow init rootfs:lnk_file { create unlink };
 # Mount debugfs on /sys/kernel/debug.
 allow init sysfs:dir mounton;
 
+# Creating files on sysfs is impossible so this isn't a threat
+# Sometimes we have to write to non-existent files to avoid conditional
+# init behavior. See b/35303861 for an example.
+dontaudit init sysfs:dir write;
+
 # Create cgroups mount points in tmpfs and mount cgroups on them.
 allow init tmpfs:dir create_dir_perms;
 allow init tmpfs:dir mounton;
